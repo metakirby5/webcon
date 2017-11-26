@@ -1,5 +1,5 @@
 ========
- web.sh
+ webcon
 ========
 
 Control your computer from a web interface.
