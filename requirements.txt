@@ -1,0 +1,3 @@
+argcomplete
+Jinja2
+PyYAML
