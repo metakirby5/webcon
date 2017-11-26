@@ -1,2 +1,3 @@
 # web.sh
-:shell: Control your computer from a web interface.
+
+Control your computer from a web interface.
