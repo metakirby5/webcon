@@ -18,7 +18,7 @@ def package_files(directory):
 
 setup(
     name='webcon',
-    version='0.0.1',
+    version='0.0.2',
     description='Control your computer from a web interface',
     long_description=long_description,
     url='https://github.com/metakirby5/webcon',
