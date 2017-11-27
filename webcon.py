@@ -3,15 +3,23 @@
 # PYTHON_ARGCOMPLETE_OK
 
 """
-Control your computer from a web interface.
+Control your computer through shell commands from a barebones web interface.
+
+Configuration goes in ~/.config/webcon/config.yaml, or may be provided by
+command line argument. Variables in `__variables__` will be substituted once via
+`str.format`.
 
 Example configuration:
 
-service1:
-    action1: echo "one"
-    action2: echo "two"
-service2:
-    action3: echo "three"
+__variables__:
+    mpvfifo: ~/.local/share/mpv/fifo
+mpv:
+    rewind: echo seek -5 > {mpvfifo}
+    play/pause: echo pause > {mpvfifo}
+    fast forward: echo seek 5 > {mpvfifo}
+announcer:
+    greet: say hello
+    part: say farewell
 """
 
 import argcomplete
@@ -34,8 +42,9 @@ CONFIG_DIR = os.getenv(
     os.path.join(HOME, '.config'))
 DEFAULT_CONFIG_FILE = os.path.join(
     CONFIG_DIR, 'webcon', 'config.yaml')
-HERE = os.path.abspath(os.path.dirname(__file__))
 
+VARIABLES_KEY = '__variables__'
+HERE = os.path.abspath(os.path.dirname(__file__))
 STATIC_ROOT = os.path.join(HERE, 'static')
 STATIC_PATH = '/static'
 SERVICE_BASE_PATH = '/service'
@@ -71,28 +80,28 @@ def parse_args():
 
     parser.add_argument(
         '--host',
-        help="""
+        help=f"""
         The server host.
-        Default: {}
-        """.format(DEFAULT_HOST),
+        Default: {DEFAULT_HOST}
+        """,
         type=str,
         default=DEFAULT_HOST)
 
     parser.add_argument(
         '-p', '--port',
-        help="""
+        help=f"""
         The server port.
-        Default: {}
-        """.format(DEFAULT_PORT),
+        Default: {DEFAULT_PORT}
+        """,
         type=str,
         default=DEFAULT_PORT)
 
     parser.add_argument(
         'config_file',
-        help="""
+        help=f"""
         The config file to use.
-        Default: {}
-        """.format(DEFAULT_CONFIG_FILE),
+        Default: {DEFAULT_CONFIG_FILE}
+        """,
         nargs='?',
         type=str,
         default=DEFAULT_CONFIG_FILE)
@@ -107,9 +116,25 @@ def main():
     # Attempt to open the config file.
     try:
         with open(args.config_file) as f:
-            config = ordered_load(f)
+            config_contents = f.read()
     except FileNotFoundError:
-        fail_with('Config file "{}" not found.'.format(args.config_file))
+        fail_with(f'Config file "{config_file}" not found.')
+
+    # Try to substitute in variables.
+    try:
+        vars = yaml.load(config_contents)[VARIABLES_KEY]
+    except yaml.YAMLError as e:
+        fail_with(f'Config error:\n\n{e}')
+    except KeyError:
+        pass
+    else:
+        try:
+            config_contents = config_contents.format(**vars)
+        except Exception as e:
+            fail_with(f'Variable substitution failed:\n\n{e}')
+
+    config = ordered_load(config_contents)
+    config.pop(VARIABLES_KEY, None)
 
     # Serve satic files.
     @bottle.get(f'{STATIC_PATH}/<filepath:path>')
