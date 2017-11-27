@@ -5,21 +5,44 @@
 """
 Control your computer through shell commands from a barebones web interface.
 
-Configuration goes in ~/.config/webcon/config.yaml, or may be provided by
-command line argument. Variables in `__variables__` will be substituted once via
-`str.format`.
+Configuration goes in ~/.config/webcon/config.yaml, or an alternate location
+may be provided by command line argument.
+
+Configuration format:
+
+- Throughout the configuration, order of each mapping is taken into account to
+  ensure the layout does not deviate from expectations.
+- The top level of the configuration is a mapping.
+- Variables in the top-level key `__variables__` will be substituted once via
+  `str.format` throughout the entire file. This may be used to extract long
+  constants, etc.
+- Every other top-level key will define a service, and its value shall be a
+  mapping of the actions it supports.
+- Each action shall define a label/command pair, in the the form of
+  `label: command`.
 
 Example configuration:
 
-__variables__:
-    mpvfifo: ~/.local/share/mpv/fifo
-mpv:
-    rewind: echo seek -5 > {mpvfifo}
-    play/pause: echo cycle pause > {mpvfifo}
-    fast forward: echo seek 5 > {mpvfifo}
-announcer:
-    greet: say hello
-    part: say farewell
+    __variables__:
+        mpvfifo: ~/.local/share/mpv/fifo
+    mpv:
+        rewind: echo seek -5 > {mpvfifo}
+        play/pause: echo cycle pause > {mpvfifo}
+        fast forward: echo seek 5 > {mpvfifo}
+    announcer:
+        greet: say hello
+        part: say farewell
+
+Explanation:
+
+- Define `mpvfifo` as a variable holding the location of a mpv fifo.
+- Define a service `mpv`.
+    - This service exports the actions `rewind`, `play/pause`, and
+      `fast forward`. The actions are different echoes to `mpvffo`.
+- Define a service `announcer`.
+    - This service exports the actions `greet` and `part`. The actions are
+    different phrases which will be synthesized through `say`.
+
 """
 
 import argcomplete
