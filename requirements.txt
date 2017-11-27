@@ -1,3 +1,4 @@
 argcomplete
-Jinja2
+bottle
+termcolor
 PyYAML
