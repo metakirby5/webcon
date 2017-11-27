@@ -50,6 +50,10 @@ STATIC_PATH = '/static'
 SERVICE_BASE_PATH = '/service'
 
 
+# Use package views only.
+bottle.TEMPLATE_PATH = [os.path.join(HERE, 'views')]
+
+
 def fail_with(msg):
     print(termcolor.colored(msg, 'red'))
     sys.exit(1)

@@ -9,7 +9,7 @@ Installation
 
 ::
 
-  pip install webcon
+  pip3 install webcon
 
 Tab completion
 --------------

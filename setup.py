@@ -1,15 +1,20 @@
 from setuptools import setup
-from os import path
+from os import path, walk
+from itertools import chain
 
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
-with open(path.join(here, 'README.rst')) as f:
+with open('README.rst') as f:
     long_description = f.read()
 
-# Get requirements from requirements.txt
-with open(path.join(here, 'requirements.txt')) as f:
-    requirements = f.read().strip().split('\n')
+
+# Gather data files required
+def package_files(directory):
+    for (p, _, fs) in walk(directory):
+        for f in fs:
+            yield path.join('..', p, f)
+
 
 setup(
     name='webcon',
@@ -32,11 +37,20 @@ setup(
         'Programming Language :: Python :: 3',
     ],
     keywords='web controller config yaml',
-    py_modules=['webcon'],
-    install_requires=requirements,
+    packages=['webcon'],
+    install_requires=[
+        'argcomplete',
+        'bottle',
+        'termcolor',
+        'PyYAML',
+    ],
     entry_points={
         'console_scripts': [
-            'webcon=webcon:main',
+            'webcon=webcon.webcon:main',
         ],
     },
+    package_data={'webcon': list(chain(
+        package_files('webcon/static'),
+        package_files('webcon/views'),
+    ))},
 )
