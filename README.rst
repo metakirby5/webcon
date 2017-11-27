@@ -6,7 +6,19 @@
 
 Control your computer through shell commands from a barebones web interface.
 
-Simple YAML-based configuration.
+Example configuration: `config.yaml`_
+
+::
+
+  __variables__:
+      mpvfifo: ~/.local/share/mpv/fifo
+  mpv:
+      rewind: echo seek -5 > {mpvfifo}
+      play/pause: echo cycle pause > {mpvfifo}
+      fast forward: echo seek 5 > {mpvfifo}
+  announcer:
+      greet: say hello
+      part: say farewell
 
 Installation
 ------------
@@ -87,3 +99,4 @@ Usage
 .. |Preview| image:: https://i.imgur.com/YWVbGoc.png
    :target: https://i.imgur.com/YWVbGoc.png
    :alt: Preview of webcon.
+.. _config.yaml: config.yaml
