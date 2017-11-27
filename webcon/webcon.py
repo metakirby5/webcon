@@ -15,7 +15,7 @@ __variables__:
     mpvfifo: ~/.local/share/mpv/fifo
 mpv:
     rewind: echo seek -5 > {mpvfifo}
-    play/pause: echo pause > {mpvfifo}
+    play/pause: echo cycle pause > {mpvfifo}
     fast forward: echo seek 5 > {mpvfifo}
 announcer:
     greet: say hello

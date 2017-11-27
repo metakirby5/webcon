@@ -2,6 +2,8 @@
  webcon
 ========
 
+|Preview|
+
 Control your computer from a web interface.
 
 Installation
@@ -43,7 +45,7 @@ Usage
       mpvfifo: ~/.local/share/mpv/fifo
   mpv:
       rewind: echo seek -5 > {mpvfifo}
-      play/pause: echo pause > {mpvfifo}
+      play/pause: echo cycle pause > {mpvfifo}
       fast forward: echo seek 5 > {mpvfifo}
   announcer:
       greet: say hello
@@ -57,3 +59,7 @@ Usage
     -h, --help            show this help message and exit
     --host HOST           The server host. Default: 0.0.0.0
     -p PORT, --port PORT  The server port. Default: 8080
+
+.. |Preview| image:: https://i.imgur.com/YWVbGoc.png
+   :target: https://i.imgur.com/YWVbGoc.png
+   :alt: Preview of webcon.
