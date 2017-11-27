@@ -4,7 +4,9 @@
 
 |Preview|
 
-Control your computer from a web interface.
+Control your computer through shell commands from a barebones web interface.
+
+Simple YAML-based configuration.
 
 Installation
 ------------
