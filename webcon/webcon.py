@@ -111,16 +111,14 @@ def parse_args():
         The server host.
         Default: {DEFAULT_HOST}
         """,
-        type=str,
         default=DEFAULT_HOST)
 
     parser.add_argument(
-        '-p', '--port',
+        '--port', '-p',
         help=f"""
         The server port.
         Default: {DEFAULT_PORT}
         """,
-        type=str,
         default=DEFAULT_PORT)
 
     parser.add_argument(
@@ -130,10 +128,9 @@ def parse_args():
         Default: {DEFAULT_CONFIG_FILE}
         """,
         nargs='?',
-        type=str,
         default=DEFAULT_CONFIG_FILE)
 
-    argcomplete.autocomplete(parser, always_complete_options=False)
+    argcomplete.autocomplete(parser)
     return parser.parse_args()
 
 
