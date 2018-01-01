@@ -174,6 +174,7 @@ def main():
         action_data = []
         for action, do in actions.items():
             action_path = f'{service_path}/{action}'
+
             @bottle.post(action_path)
             def action_route(action=action,
                              do=do):
@@ -182,9 +183,8 @@ def main():
                         do, stderr=subprocess.STDOUT,
                         shell=True)
                 except subprocess.CalledProcessError as e:
-                    return (
-                        f'=== FAILED WITH RETURN CODE {e.returncode} ===',
-                        e.output)
+                    return bottle.HTTPResponse(status=500,
+                                               body=e.output)
 
             action_data.append((action, action_path))
 
