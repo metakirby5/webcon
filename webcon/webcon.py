@@ -142,7 +142,7 @@ def main():
         with open(args.config_file) as f:
             config_contents = f.read()
     except FileNotFoundError:
-        fail_with(f'Config file "{config_file}" not found.')
+        fail_with(f'Config file "{args.config_file}" not found.')
 
     # Try to substitute in variables.
     try:
