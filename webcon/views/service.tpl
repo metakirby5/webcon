@@ -15,7 +15,10 @@ const post = async (url) => {
   $output.className = ''
   $output.textContent = 'Dispatching command...'
 
-  const response = await fetch(url, {method: 'post'})
+  const response = await fetch(url, {
+    method: 'post',
+    credentials: 'same-origin'
+  })
 
   $output.textContent = await response.text() || 'No output.'
   $output.classList.add(response.ok ? 'success' : 'error')
